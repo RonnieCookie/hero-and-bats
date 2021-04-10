@@ -1,3 +1,8 @@
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    otherSprite.destroy()
+})
+let enemy: Sprite = null
 let Hero = sprites.create(img`
     . . . . f f f f . . . . . 
     . . f f f f f f f f . . . 
@@ -17,3 +22,31 @@ let Hero = sprites.create(img`
     . . . f f . . f f . . . . 
     `, SpriteKind.Player)
 controller.moveSprite(Hero)
+info.setLife(3)
+tiles.setTilemap(tilemap`level1`)
+scene.cameraFollowSprite(Hero)
+scene.setBackgroundColor(9)
+tiles.placeOnTile(Hero, tiles.getTileLocation(1, 1))
+game.onUpdateInterval(3000, function () {
+    enemy = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . c c c . . . . . . 
+        . . . . . . a b a a . . . . . . 
+        . . . . . c b a f c a c . . . . 
+        . . . . c b b b f f a c c . . . 
+        . . . . b b f a b b a a c . . . 
+        . . . . c b f f b a f c a . . . 
+        . . . . . c a a c b b a . . . . 
+        . . . . . . c c c c . . . . . . 
+        . . . . . . . c . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Enemy)
+    tiles.placeOnRandomTile(enemy, assets.tile`myTile`)
+    enemy.vx = randint(-200, -100)
+    enemy.setFlag(SpriteFlag.DestroyOnWall, true)
+})
